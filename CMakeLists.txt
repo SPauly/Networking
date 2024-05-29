@@ -112,5 +112,25 @@ target_link_libraries(SimpleRelay
   ${_PROTOBUF_LIBPROTOBUF}
 )
 
+############################################
+# Build TextingClient
+############################################
+
+add_executable(TextingClient
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/texting_client.cc"
+)
+
+target_include_directories(TextingClient
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/protos
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(TextingClient
+  Relay_proto
+  ${_REFLECTION}
+  ${_GRPC_GRPCPP}
+  ${_PROTOBUF_LIBPROTOBUF}
+)
 
 

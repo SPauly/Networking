@@ -6,7 +6,7 @@
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 
-#include "protos/Relay.grpc.pb.h"
+#include "Relay.grpc.pb.h"
 
 #include <iostream>
 #include <string>

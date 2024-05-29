@@ -1,4 +1,4 @@
-#include "SimpleRelay/relay_server.h"
+#include "relay_server.h"
 
 namespace SimpleTextingRelay {
 
@@ -7,7 +7,7 @@ RelayServer::RelayServer(const std::string& server_address)
 
 grpc::Status RelayServer::Ping(grpc::ServerContext* ctx, const Id* request,
                                Id* response) {
-  response->set_id(42);
+  response->set_id(request->id());
   std::cout << "[PING] Received request with ID: " << request->id() << "\n";
   return grpc::Status::OK;
 }
@@ -21,3 +21,9 @@ void RelayServer::Run() {
 }
 
 }  // namespace SimpleTextingRelay
+
+int main() {
+  SimpleTextingRelay::RelayServer server("0.0.0.0:50000");
+  server.Run();
+  return 0;
+}
