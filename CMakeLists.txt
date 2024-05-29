@@ -50,7 +50,6 @@ set(bn_proto_files
   "${CMAKE_CURRENT_SOURCE_DIR}/protos/Relay.proto"
 )
 
-
 foreach(bn_p_path ${bn_proto_files})
 
   get_filename_component(bn_p_path ${bn_p_path} ABSOLUTE)
@@ -76,6 +75,7 @@ foreach(bn_p_path ${bn_proto_files})
   )
 
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/protos)
 
   add_library(${bn_p_file}_proto
     ${bn_proto_gen_h}  
@@ -91,4 +91,26 @@ foreach(bn_p_path ${bn_proto_files})
   ${_PROTOBUF_LIBPROTOBUF}
   )
 endforeach()
+
+############################################
+# Build SimpleRelay
+############################################
+
+add_executable(SimpleRelay
+  "${CMAKE_CURRENT_SOURCE_DIR}/SimpleRelay/relay_server.cc"
+)
+
+target_include_directories(SimpleRelay
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/protos
+)
+
+target_link_libraries(SimpleRelay
+  Relay_proto
+  ${_REFLECTION}
+  ${_GRPC_GRPCPP}
+  ${_PROTOBUF_LIBPROTOBUF}
+)
+
+
 
