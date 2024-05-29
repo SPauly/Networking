@@ -24,7 +24,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/grpc/grpc
   GIT_TAG        v1.63.0  
 )
-set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_QUIET ON)
 FetchContent_MakeAvailable(gRPC)
 
 set(_PROTOBUF_LIBPROTOBUF libprotobuf)
@@ -47,25 +47,32 @@ set(bn_grpc_suf_h ".grpc.pb.h")
 set(bn_grpc_suf_cc ".grpc.pb.cc")
 
 set(bn_proto_files
-  Relay
+  "${CMAKE_CURRENT_SOURCE_DIR}/protos/Relay.proto"
 )
 
 
-foreach(bn_p_file ${bn_proto_files})
-  set(bn_proto_gen_h ${bn_p_file}/${bn_p_file}${bn_proto_suf_h})
-  set(bn_proto_gen_cc ${bn_p_file}/${bn_p_file}${bn_prot_suf_cc})
-  set(bn_grpc_gen_h ${bn_p_file}/${bn_p_file}${bn_grpc_suf_h})
-  set(bn_grpc_gen_cc ${bn_p_file}/${bn_p_file}${bn_grpc_suf_cc})
+foreach(bn_p_path ${bn_proto_files})
+
+  get_filename_component(bn_p_path ${bn_p_path} ABSOLUTE)
+  get_filename_component(bn_p_proto_path "${bn_p_path}" PATH)
+
+  get_filename_component(bn_p_file ${bn_p_path} NAME_WE)
+  message("Building protos for: ${bn_p_file}")
+
+  set(bn_proto_gen_h ${CMAKE_CURRENT_SOURCE_DIR}/protos/${bn_p_file}${bn_proto_suf_h})
+  set(bn_proto_gen_cc ${CMAKE_CURRENT_SOURCE_DIR}/protos/${bn_p_file}${bn_prot_suf_cc})
+  set(bn_grpc_gen_h ${CMAKE_CURRENT_SOURCE_DIR}/protos/${bn_p_file}${bn_grpc_suf_h})
+  set(bn_grpc_gen_cc ${CMAKE_CURRENT_SOURCE_DIR}/protos/${bn_p_file}${bn_grpc_suf_cc})
 
   add_custom_command(
     OUTPUT "${bn_proto_gen_h}" "${bn_proto_gen_cc}" "${bn_grpc_gen_h}" "${bn_grpc_gen_cc}"
     COMMAND ${_PROTOBUF_PROTOC}
-    ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}"
-      --cpp_out "${CMAKE_CURRENT_BINARY_DIR}" 
-      -I "${CMAKE_CURRENT_SOURCE_DIR}/protos"
+    ARGS --grpc_out "${CMAKE_CURRENT_SOURCE_DIR}/protos"
+      --cpp_out "${CMAKE_CURRENT_SOURCE_DIR}/protos" 
+      -I "${bn_p_proto_path}"
       --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
-      "${bn_p_file}"
-    DEPENDS "${bn_p_file}"
+      "${bn_p_path}"
+    DEPENDS "${bn_p_path}"
   )
 
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
