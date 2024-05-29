@@ -22,7 +22,7 @@ ExternalProject_Add(absl
   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/grpc/third_party/abseil-cpp"
   CMAKE_CACHE_ARGS
         -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/absl
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/absl
 )
 
 # Builds c-ares project from the git submodule.
@@ -33,18 +33,18 @@ ExternalProject_Add(c-ares
         -DCARES_SHARED:BOOL=OFF
         -DCARES_STATIC:BOOL=ON
         -DCARES_STATIC_PIC:BOOL=ON
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/c-ares
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares
 )
 
 # Builds protobuf project from the git submodule.
 ExternalProject_Add(protobuf
   PREFIX protobuf
-  SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/grpc/third_party/protobuf/cmake"
+  SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/grpc/third_party/protobuf/"
   CMAKE_CACHE_ARGS
         -Dprotobuf_BUILD_TESTS:BOOL=OFF
         -Dprotobuf_WITH_ZLIB:BOOL=OFF
         -Dprotobuf_MSVC_STATIC_RUNTIME:BOOL=OFF
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/protobuf
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/protobuf
 )
 
 # Builds re2 project from the git submodule.
@@ -53,7 +53,7 @@ ExternalProject_Add(re2
   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/grpc/third_party/re2"
   CMAKE_CACHE_ARGS
         -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/re2
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/re2
 )
 
 # Builds zlib project from the git submodule.
@@ -61,14 +61,14 @@ ExternalProject_Add(zlib
   PREFIX zlib
   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/grpc/third_party/zlib"
   CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/zlib
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/zlib
 )
 
 # the location where protobuf-config.cmake will be installed varies by platform
 if (WIN32)
-  set(_FINDPACKAGE_PROTOBUF_CONFIG_DIR "${SUP_GRPC_BINARIES_DIR}/protobuf/cmake")
+  set(_FINDPACKAGE_PROTOBUF_CONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/protobuf/cmake")
 else()
-  set(_FINDPACKAGE_PROTOBUF_CONFIG_DIR "${SUP_GRPC_BINARIES_DIR}/protobuf/lib/cmake/protobuf")
+  set(_FINDPACKAGE_PROTOBUF_CONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/protobuf/lib/cmake/protobuf")
 endif()
 
 # if OPENSSL_ROOT_DIR is set, propagate that hint path to the external projects with OpenSSL dependency.
@@ -88,17 +88,18 @@ ExternalProject_Add(grpc
         -DgRPC_BUILD_MSVC_MP_COUNT:STRING=-1
         -DgRPC_PROTOBUF_PROVIDER:STRING=package
         -DgRPC_PROTOBUF_PACKAGE_TYPE:STRING=CONFIG
-        -DProtobuf_DIR:PATH=${SUP_GRPC_BINARIES_DIR}/protobuf/lib/cmake/protobuf
+        -Dutf8_range_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/protobuf/lib/cmake/utf8_range
+        -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
         -DgRPC_RE2_PROVIDER:STRING=package
-        -Dre2_DIR:STRING=${SUP_GRPC_BINARIES_DIR}/re2/lib/cmake/re2
+        -Dre2_DIR:STRING=${CMAKE_CURRENT_BINARY_DIR}/re2/lib/cmake/re2
         -DgRPC_ZLIB_PROVIDER:STRING=package
-        -DZLIB_ROOT:STRING=${SUP_GRPC_BINARIES_DIR}/zlib
+        -DZLIB_ROOT:STRING=${CMAKE_CURRENT_BINARY_DIR}/zlib
         -DgRPC_ABSL_PROVIDER:STRING=package
-        -Dabsl_DIR:STRING=${SUP_GRPC_BINARIES_DIR}/absl/lib/cmake/absl
+        -Dabsl_DIR:STRING=${CMAKE_CURRENT_BINARY_DIR}/absl/lib/cmake/absl
         -DgRPC_CARES_PROVIDER:STRING=package
-        -Dc-ares_DIR:PATH=${SUP_GRPC_BINARIES_DIR}/c-ares/lib/cmake/c-ares
+        -Dc-ares_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares/lib/cmake/c-ares
         -DgRPC_SSL_PROVIDER:STRING=package
-        ${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
-        -DCMAKE_INSTALL_PREFIX:PATH=${SUP_GRPC_BINARIES_DIR}/grpc
+        "C:/Program Files/OpenSSL-Win64/bin"
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc
   DEPENDS c-ares protobuf re2 zlib absl
 )

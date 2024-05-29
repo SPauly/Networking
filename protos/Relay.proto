@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package SimpleTextingRelay;
+
+service RelayService {
+  rpc Ping(Id) returns (Id) {}
+}
+
+message Id{
+    int32 id = 1;
+}

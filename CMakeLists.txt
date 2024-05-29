@@ -11,20 +11,20 @@ project(BasicNetworking)
 # Add gRPC
 ############################################
 
-option(BUILD_GRPC "Build gRPC" ON)
-option(USE_SYSTEM_GRPC "Use system installed gRPC" OFF)
+include(FetchContent)
+FetchContent_Declare(
+  gRPC
+  GIT_REPOSITORY https://github.com/grpc/grpc
+  GIT_TAG        v1.64.0  # e.g v1.28.0
+)
+set(FETCHCONTENT_QUIET OFF)
+FetchContent_MakeAvailable(gRPC)
 
-if(USE_SYSTEM_GRPC)
-  message(STATUS "Using system-installed gRPC")
-  # Find system-installed gRPC
-  find_package(gRPC CONFIG REQUIRED)
-elseif(BUILD_GRPC)
-  message(STATUS "Building gRPC from source")
-  
-  include(cmake/grpc.cmake)
-else()  
-  include(cmake/grpc_helpers.cmake)
-endif()
+
+############################################
+# Build Proto files
+############################################
+
 
 
 
