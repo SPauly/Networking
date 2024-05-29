@@ -1,1 +1,6 @@
 build/
+# ignore protoc files
+*grpc.pb.cc
+*grpc.pb.h
+*pb.cc
+*pb.h
