@@ -11,7 +11,7 @@ void TextingClient::Run() {
       grpc::CreateChannel(server_address_, grpc::InsecureChannelCredentials());
 
   // Create a stub to the server
-  stub_ = RelayService::NewStub(channel_);
+  stub_ = TextingService::NewStub(channel_);
 
   grpc::ClientContext ctx;
   // Send a ping request to the server

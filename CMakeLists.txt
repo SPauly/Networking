@@ -93,20 +93,20 @@ foreach(bn_p_path ${bn_proto_files})
 endforeach()
 
 ############################################
-# Build SimpleRelay
+# Build SimpleServer
 ############################################
 
-add_executable(SimpleRelay
+add_executable(SimpleServer
   "${CMAKE_CURRENT_SOURCE_DIR}/SimpleServer/simple_server.cc"
 )
 
-target_include_directories(SimpleRelay
+target_include_directories(SimpleServer
   PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/protos
 )
 
-target_link_libraries(SimpleRelay
-  Relay_proto
+target_link_libraries(SimpleServer
+  simple_texting_service_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF}
@@ -127,7 +127,7 @@ target_include_directories(TextingClient
 )
 
 target_link_libraries(TextingClient
-  Relay_proto
+  simple_texting_service_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF}
