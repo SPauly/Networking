@@ -6,19 +6,19 @@
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 
-#include "Relay.grpc.pb.h"
+#include "simple_texting_service.grpc.pb.h"
 
 #include <iostream>
 #include <string>
 #include <memory>
 
-namespace SimpleTextingRelay {
+namespace SimpleTextingService {
 
-class RelayServer final : public RelayService::Service {
+class TextingServer final : public TextingService::Service {
  public:
-  RelayServer() = delete;
-  RelayServer(const std::string& server_address);
-  virtual ~RelayServer() = default;
+  TextingServer() = delete;
+  TextingServer(const std::string& server_address);
+  virtual ~TextingServer() = default;
 
   void Run();
 
@@ -32,4 +32,4 @@ class RelayServer final : public RelayService::Service {
   std::unique_ptr<grpc::Server> server_;
 };
 
-}  // namespace SimpleTextingRelay
+}  // namespace SimpleTextingService

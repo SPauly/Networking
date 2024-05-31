@@ -1,18 +1,18 @@
-#include "relay_server.h"
+#include "simple_server.h"
 
-namespace SimpleTextingRelay {
+namespace SimpleTextingService {
 
-RelayServer::RelayServer(const std::string& server_address)
+TextingServer::TextingServer(const std::string& server_address)
     : server_address_(server_address) {}
 
-grpc::Status RelayServer::Ping(grpc::ServerContext* ctx, const Id* request,
-                               Id* response) {
+grpc::Status TextingServer::Ping(grpc::ServerContext* ctx, const Id* request,
+                                 Id* response) {
   response->set_id(request->id());
   std::cout << "[PING] Received request with ID: " << request->id() << "\n";
   return grpc::Status::OK;
 }
 
-void RelayServer::Run() {
+void TextingServer::Run() {
   builder_.AddListeningPort(server_address_, grpc::InsecureServerCredentials());
   builder_.RegisterService(this);
   server_ = builder_.BuildAndStart();
@@ -20,10 +20,10 @@ void RelayServer::Run() {
   server_->Wait();
 }
 
-}  // namespace SimpleTextingRelay
+}  // namespace SimpleTextingService
 
 int main() {
-  SimpleTextingRelay::RelayServer server("0.0.0.0:50000");
+  SimpleTextingService::TextingServer server("0.0.0.0:50000");
   server.Run();
   return 0;
 }

@@ -1,6 +1,6 @@
 #include "TextingClient/texting_client.h"
 
-namespace SimpleTextingRelay {
+namespace SimpleTextingService {
 
 TextingClient::TextingClient(const std::string& server_address)
     : server_address_(server_address) {}
@@ -16,7 +16,7 @@ void TextingClient::Run() {
   grpc::ClientContext ctx;
   // Send a ping request to the server
 
-  SimpleTextingRelay::Id pid, rid;
+  SimpleTextingService::Id pid, rid;
 
   grpc::Status status = stub_->Ping(&ctx, pid, &rid);
 
@@ -43,19 +43,19 @@ void TextingClient::Run() {
 }
 
 grpc::Status TextingClient::Ping(uint32_t id,
-                                 SimpleTextingRelay::Id& response) {
+                                 SimpleTextingService::Id& response) {
   grpc::ClientContext ctx;
-  SimpleTextingRelay::Id pid;
+  SimpleTextingService::Id pid;
 
   pid.set_id(id);
 
   return stub_->Ping(&ctx, pid, &response);
 }
 
-}  // namespace SimpleTextingRelay
+}  // namespace SimpleTextingService
 
 int main() {
-  SimpleTextingRelay::TextingClient client("localhost:50000");
+  SimpleTextingService::TextingClient client("localhost:50000");
   client.Run();
   return 0;
 }

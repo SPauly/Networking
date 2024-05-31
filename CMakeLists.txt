@@ -47,7 +47,7 @@ set(bn_grpc_suf_h ".grpc.pb.h")
 set(bn_grpc_suf_cc ".grpc.pb.cc")
 
 set(bn_proto_files
-  "${CMAKE_CURRENT_SOURCE_DIR}/protos/Relay.proto"
+  "${CMAKE_CURRENT_SOURCE_DIR}/protos/simple_texting_service.proto"
 )
 
 foreach(bn_p_path ${bn_proto_files})
@@ -97,7 +97,7 @@ endforeach()
 ############################################
 
 add_executable(SimpleRelay
-  "${CMAKE_CURRENT_SOURCE_DIR}/SimpleRelay/relay_server.cc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/SimpleServer/simple_server.cc"
 )
 
 target_include_directories(SimpleRelay

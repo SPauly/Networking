@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package SimpleTextingRelay;
+package SimpleTextingService;
 
-service RelayService {
+service TextingService {
   rpc Ping(Id) returns (Id) {}
 }
 
